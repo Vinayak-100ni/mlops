@@ -60,7 +60,17 @@ pipenv shell
 aws configure
 
 
-#Finally 
+#Finally
+mlflow server \
+  -h 0.0.0.0 \
+  --port 5000 \
+  --backend-store-uri sqlite:///mlflow.db \
+  --default-artifact-root file:///mnt/mlflow-artifacts \
+  --allowed-hosts "*" \
+  --cors-allowed-origins "*"
+
+  or
+
 mlflow server -h 0.0.0.0 --default-artifact-root s3://mlflow-tracking-buc25 --allowed-hosts *
 
 #open Public IPv4 DNS to the port 5000
