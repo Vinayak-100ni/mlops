@@ -88,4 +88,6 @@ now the model is created now attact it to backend
 create api.py
 
 19. install docker and create dockerfile
-    
+20. create docker container
+    ``` docker build -t churn-model .```
+21. 
