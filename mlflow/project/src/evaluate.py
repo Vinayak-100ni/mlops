@@ -1,43 +1,83 @@
+# src/evaluate.py
+
+import json
 import pandas as pd
 import joblib
-from sklearn.metrics import accuracy_score
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
 
-# Load data
-df = pd.read_csv("../data/processed/cleaned.csv")
+from sklearn.metrics import accuracy_score, classification_report
 
-# Encode text columns
-for column in df.columns:
-    if df[column].dtype == "object":
-        encoder = LabelEncoder()
-        df[column] = encoder.fit_transform(df[column].astype(str))
+# -----------------------------
+# Load Dataset
+# -----------------------------
+data_path = "../data/processed/cleaned.csv"
 
-# Target
+print("Loading dataset...")
+df = pd.read_csv(data_path)
+
+# -----------------------------
+# Data Cleaning
+# -----------------------------
 target_column = "Churn"
 
-X = df.drop(columns=[target_column])
+# Remove empty rows
+df.dropna(how="all", inplace=True)
+
+# -----------------------------
+# Encode Categorical Columns
+# -----------------------------
+for column in df.columns:
+    if df[column].dtype == "object":
+        df[column] = df[column].astype("category").cat.codes
+
+# -----------------------------
+# Remove Same Columns as Training
+# -----------------------------
+drop_columns = [target_column]
+
+if "customerID" in df.columns:
+    drop_columns.append("customerID")
+
+X = df.drop(columns=drop_columns)
 y = df[target_column]
 
-# Split
-X_train, X_test, y_train, y_test = train_test_split(
-    X,
-    y,
-    test_size=0.2,
-    random_state=42
-)
+# -----------------------------
+# Load Model
+# -----------------------------
+print("Loading model...")
 
-# Load model
 model = joblib.load("model/churn_model.pkl")
 
-# Predict
-predictions = model.predict(X_test)
+# -----------------------------
+# Predictions
+# -----------------------------
+print("Running evaluation...")
 
-# Accuracy
-accuracy = accuracy_score(y_test, predictions)
+predictions = model.predict(X)
 
-# Save report
-with open("reports/metrics.txt", "w") as f:
-    f.write(f"Accuracy: {accuracy}")
+# -----------------------------
+# Metrics
+# -----------------------------
+accuracy = accuracy_score(y, predictions)
 
-print("Evaluation completed")
+report = classification_report(y, predictions, output_dict=True)
+
+metrics = {
+    "accuracy": accuracy,
+    "precision_class_0": report["0"]["precision"],
+    "precision_class_1": report["1"]["precision"],
+    "recall_class_0": report["0"]["recall"],
+    "recall_class_1": report["1"]["recall"],
+    "f1_score_class_0": report["0"]["f1-score"],
+    "f1_score_class_1": report["1"]["f1-score"]
+}
+
+# -----------------------------
+# Save Metrics
+# -----------------------------
+print("Saving metrics...")
+
+with open("reports/metrics.json", "w") as f:
+    json.dump(metrics, f, indent=4)
+
+print("Evaluation Complete")
+print(metrics)
