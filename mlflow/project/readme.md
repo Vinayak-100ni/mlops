@@ -18,7 +18,6 @@ project/
 ├── model/
 ├── notebooks/
 ├── src/
-├── dvc.yaml
 ├── Dockerfile
 ├── terraform/
 ├── k8s/
@@ -48,3 +47,10 @@ print("Path:", path)
     dvc add data/Telco_Cusomer_Churn.csv
     ```
 15 . Model Training
+```
+python src/train.py
+```
+16. MLflow Tracking
+```
+
+```
