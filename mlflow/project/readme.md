@@ -52,5 +52,21 @@ python src/train.py
 ```
 16. MLflow Tracking
 ```
-
+mlflow server \
+  -h 0.0.0.0 \
+  --port 5000 \
+  --backend-store-uri sqlite:///mlflow.db \
+  --default-artifact-root file:///mnt/mlflow-artifacts \
+  --allowed-hosts "*" \
+  --cors-allowed-origins "*"
+```
+### Track logs:
+learning rate / epochs /max_depth /batch size
+```
+mlflow.log_param("n_estimators", 100)
+```
+### Tracks metrices:
+accuracy / precision / recall / F1 score /loss
+```
+mlflow.log_metric("accuracy", 0.89)
 ```
