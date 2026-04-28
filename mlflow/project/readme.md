@@ -78,3 +78,6 @@ Create dvc.yaml
      Data preparation
      Training
      Evaluation
+```
+Run Pipeline :- dvc repro
+```
