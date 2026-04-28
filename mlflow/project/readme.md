@@ -70,3 +70,11 @@ accuracy / precision / recall / F1 score /loss
 ```
 mlflow.log_metric("accuracy", 0.89)
 ```
+17. ### Create DVC Pipeline
+Create dvc.yaml
+
+#### Pipeline stages:
+
+     Data preparation
+     Training
+     Evaluation
