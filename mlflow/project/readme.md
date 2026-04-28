@@ -1,3 +1,98 @@
+```
+The Complete MLOps Flow
+Phase 1: Experimentation with MLflow 🧪
+Purpose: Find the best model
+
+Train multiple models with different hyperparameters
+MLflow logs everything:
+
+Parameters: n_estimators=100, max_depth=10
+Metrics: accuracy=0.85, precision=0.82
+Models: Saves each trained model
+
+
+Compare in MLflow UI: See which model performs best
+Select winner: Pick the model with highest accuracy/F1-score
+
+Why: You need to experiment and find what works best before production
+
+Phase 2: Production Pipeline with DVC 🏭
+Purpose: Make the winning model reproducible
+
+Create DVC pipeline (dvc.yaml) with the best parameters you found
+DVC automates:
+
+prepare.py → Clean data
+train.py → Train model with best parameters
+evaluate.py → Generate metrics
+
+
+Run dvc repro → Entire pipeline executes automatically
+DVC tracks:
+
+Data versions
+Code versions
+Model versions
+
+
+Commit to Git: git add dvc.lock → Pipeline state saved
+
+Why: DVC ensures anyone can reproduce your exact model, anytime
+
+Phase 3: Deploy Model in Application 🚀
+Purpose: Serve predictions to users
+
+Load the model from model/churn_model.pkl
+Create FastAPI endpoint:
+
+python   @app.post('/predict')
+   def predict(data):
+       prediction = model.predict(data)
+       return {'churn': prediction}
+
+Containerize with Docker
+Deploy to production (AWS, GCP, Kubernetes)
+Your app calls the API: POST /predict → Get predictions
+
+Why: Users need real-time predictions through an API
+
+The Key Difference
+ToolWhen to UsePurposeMLflowDuring developmentExperiment, compare, find best modelDVCAfter finding best modelAutomate pipeline, version everythingFastAPI + DockerAfter DVC pipeline worksDeploy model to production
+
+Real Example Flow
+
+(MLflow):
+
+Train 20 different models
+Try different algorithms, hyperparameters
+MLflow shows Model #15 has best accuracy (89%)
+
+
+(DVC):
+
+Put Model #15's parameters in train.py
+Create dvc.yaml pipeline
+Run dvc repro → Reproducible model created
+Commit everything to Git
+
+
+(Deployment):
+
+Create api.py with FastAPI
+Build Docker image
+Deploy to AWS/GCP
+Your mobile app/website calls the API
+
+
+Future Updates:
+
+New data arrives? → dvc repro retrains automatically
+Better model found? → Update pipeline, rebuild Docker
+Everything is versioned and traceable
+```
+
+
+
 1.   sudo apt update
 2.   sudo apt install python3-pip
 3.   sudo apt install python3-venv python3-pip -y
