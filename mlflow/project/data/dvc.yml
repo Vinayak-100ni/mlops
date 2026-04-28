@@ -20,4 +20,4 @@ stages:
     - model/churn_model.pkl
     - processed/cleaned.csv
     outs:
-    - reports/metrics.txt
+    - reports/metrics.json
