@@ -21,7 +21,7 @@ mlflow.set_experiment("customer-churn-training")
 # Load Dataset
 # -----------------------------
 # Update path if your dataset location is different
-data_path = "data/churn.csv"
+data_path = "../data/Telco_Cusomer_Churn.csv"
 
 print("Loading dataset...")
 df = pd.read_csv(data_path)
