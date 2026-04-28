@@ -90,4 +90,5 @@ create api.py
 19. install docker and create dockerfile
 20. create docker container
     ``` docker build -t churn-model .```
-21. 
+21. run docker container
+    ```  docker run -p 8000:8000 churn-model 
