@@ -20,8 +20,7 @@ mlflow.set_experiment("customer-churn-training")
 # -----------------------------
 # Load Dataset
 # -----------------------------
-# Update path if your dataset location is different
-data_path = "../data/Telco_Cusomer_Churn.csv"
+data_path = "../data/processed/cleaned.csv"
 
 print("Loading dataset...")
 df = pd.read_csv(data_path)
@@ -33,14 +32,17 @@ print("Dataset Shape:", df.shape)
 # -----------------------------
 print("Cleaning data...")
 
-# Remove empty rows
+# Remove fully empty rows
 df.dropna(how="all", inplace=True)
 
-# Convert target column
-# Change 'Churn' if your target column name is different
+# Target column
 target_column = "Churn"
 
-# Encode categorical columns
+# -----------------------------
+# Encode Categorical Columns
+# -----------------------------
+print("Encoding categorical columns...")
+
 label_encoders = {}
 
 for column in df.columns:
@@ -50,14 +52,33 @@ for column in df.columns:
         label_encoders[column] = encoder
 
 # -----------------------------
-# Handle Missing Values
+# Remove Unwanted Columns
 # -----------------------------
-imputer = SimpleImputer(strategy="mean")
+print("Removing unnecessary columns...")
 
-X = df.drop(columns=[target_column])
+drop_columns = [target_column]
+
+# Remove customerID if present
+if "customerID" in df.columns:
+    drop_columns.append("customerID")
+
+X = df.drop(columns=drop_columns)
 y = df[target_column]
 
-X = pd.DataFrame(imputer.fit_transform(X), columns=X.columns)
+print("Features Used:")
+print(X.columns.tolist())
+
+# -----------------------------
+# Handle Missing Values
+# -----------------------------
+print("Handling missing values...")
+
+imputer = SimpleImputer(strategy="mean")
+
+X = pd.DataFrame(
+    imputer.fit_transform(X),
+    columns=X.columns
+)
 
 # -----------------------------
 # Train Test Split
@@ -81,7 +102,7 @@ with mlflow.start_run():
     # Model
     model = LogisticRegression(max_iter=1000)
 
-    # Train
+    # Train Model
     model.fit(X_train, y_train)
 
     # Predictions
@@ -90,21 +111,25 @@ with mlflow.start_run():
     # Accuracy
     accuracy = accuracy_score(y_test, predictions)
 
-    print("Accuracy:", accuracy)
+    print(f"Accuracy: {accuracy}")
 
     # -----------------------------
     # MLflow Logging
     # -----------------------------
     mlflow.log_param("model_type", "LogisticRegression")
     mlflow.log_param("test_size", 0.2)
+    mlflow.log_param("max_iter", 1000)
 
     mlflow.log_metric("accuracy", accuracy)
 
+    # Log model to MLflow
     mlflow.sklearn.log_model(model, "model")
 
     # -----------------------------
     # Save Model Locally
     # -----------------------------
+    print("Saving model...")
+
     os.makedirs("model", exist_ok=True)
 
     model_path = "model/churn_model.pkl"
@@ -114,7 +139,7 @@ with mlflow.start_run():
     print(f"Model saved to {model_path}")
 
     # -----------------------------
-    # Print Report
+    # Classification Report
     # -----------------------------
     print("\nClassification Report:\n")
     print(classification_report(y_test, predictions))
