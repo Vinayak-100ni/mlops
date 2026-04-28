@@ -10,22 +10,7 @@
 9.   pip install dvc
 10.  pip install fastapi uvicorn
 11.  pip install scikit-learn pandas
-
-12.  install dataset using kaggle
-```
-(mlfow) azureuser@mlops-testing:~/mlops-project/data$ python      
-```
-```
-import kagglehub
-
-path = kagglehub.dataset_download("mosapabdelghany/telcom-customer-churn-dataset")
-
-print("Path:", path)
-```
-```
- cp -r ~/.cache/kagglehub/datasets/* ~/mlops-project/data
-```
-13.
+12.
 ```
 project/
 │
@@ -39,3 +24,27 @@ project/
 ├── k8s/
 └── mlruns/
 ```
+13.  install dataset using kaggle and Dataset Setup
+```
+(mlfow) azureuser@mlops-testing:~/mlops-project/data$ python      
+```
+```
+import kagglehub
+
+path = kagglehub.dataset_download("mosapabdelghany/telcom-customer-churn-dataset")
+
+print("Path:", path)
+```
+```
+ cp -r ~/.cache/kagglehub/datasets/* ~/mlops-project/data
+```
+14. Data Versioning with DVC
+    ```
+    dvc init
+    git add .
+    git commit -m "DVC initialized"
+    ```
+    ```
+    dvc add data/Telco_Cusomer_Churn.csv
+    ```
+15 . Model Training
