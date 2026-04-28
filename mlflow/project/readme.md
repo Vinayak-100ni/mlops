@@ -91,4 +91,11 @@ create api.py
 20. create docker container
     ``` docker build -t churn-model .```
 21. run docker container
-    ```  docker run -p 8000:8000 churn-model 
+    ```  docker run -p 8000:8000 churn-model
+
+22. if you change any think in model then do
+```
+dvc repro
+git add dvc.lock reports/metrics.json
+git commit -m "New model version"
+```
