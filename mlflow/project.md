@@ -25,3 +25,15 @@ print("Path:", path)
 ```
  cp -r ~/.cache/kagglehub/datasets/* ~/mlops-project/data
 ```
+13.
+project/
+│
+├── data/
+├── model/
+├── notebooks/
+├── src/
+├── dvc.yaml
+├── Dockerfile
+├── terraform/
+├── k8s/
+└── mlruns/
