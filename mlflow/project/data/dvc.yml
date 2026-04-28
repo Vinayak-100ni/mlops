@@ -1,0 +1,23 @@
+stages:
+  prepare:
+    cmd: python ../src/prepare.py
+    deps:
+    - ../src/prepare.py
+    - Telco_Cusomer_Churn.csv
+    outs:
+    - processed/cleaned.csv
+  train:
+    cmd: python ../src/train.py
+    deps:
+    - ../data/processed/cleaned.csv
+    - ../src/train.py
+    outs:
+    - model/churn_model.pkl
+  evaluate:
+    cmd: python ../src/evaluate.py
+    deps:
+    - ../src/evaluate.py
+    - model/churn_model.pkl
+    - processed/cleaned.csv
+    outs:
+    - reports/metrics.txt
