@@ -1,6 +1,3 @@
-```
-Yes, exactly! Let me break down the complete flow in simple terms:
-
 ## **The Complete MLOps Flow**
 
 ### **Phase 1: Experimentation with MLflow** 🧪
