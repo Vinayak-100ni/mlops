@@ -82,3 +82,10 @@ Run Pipeline :-
 ```
  dvc repro
 ```
+18..
+now the model is created now attact it to backend
+
+create api.py
+```
+
+```
