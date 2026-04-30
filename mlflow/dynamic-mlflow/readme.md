@@ -107,6 +107,30 @@ class MLflowHelper:
 ```
 
 ---
+```
+Package It
+
+MLOps team creates package:
+
+pip install company-mlflow-sdk
+
+Internal pip package.
+
+Step 3 — ML Developer Uses Package
+
+ML developer code becomes very small.
+
+from company_mlflow_sdk import ExperimentTracker
+Step 4 — Developer Only Passes Data
+tracker = ExperimentTracker()
+
+tracker.log_experiment(
+    experiment_name="Churn_Model",
+    model=model,
+    params=params,
+    metrics=metrics
+)
+```
 
 # Step 2 — Use It Dynamically in Any Model Code
 
